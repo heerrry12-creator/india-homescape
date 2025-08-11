@@ -11,7 +11,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 focus-visible">
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">H</span>
             </div>
@@ -36,15 +36,15 @@ const Header = () => {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="gap-1">
+            <Button variant="ghost" size="sm" className="gap-1 focus-visible">
               <Heart className="w-4 h-4" />
-              Saved
+              <span className="hidden lg:inline">Saved</span>
             </Button>
-            <Button variant="ghost" size="sm" className="gap-1">
+            <Button variant="ghost" size="sm" className="gap-1 focus-visible">
               <Phone className="w-4 h-4" />
-              +91 98765 43210
+              <span className="hidden lg:inline">+91 98765 43210</span>
             </Button>
-            <Button variant="navy" size="sm" className="gap-1">
+            <Button variant="navy" size="sm" className="gap-1 focus-visible">
               <User className="w-4 h-4" />
               Login
             </Button>

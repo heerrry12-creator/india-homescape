@@ -116,51 +116,27 @@ const HomePage = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-              <Button variant="secondary" size="xl" className="group">
-                <Home className="w-5 h-5 mr-2" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              <Button variant="hero" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <Home className="w-6 h-6 mr-3" />
                 Buy Properties
-                <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
-              <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy">
-                <Key className="w-5 h-5 mr-2" />
+              <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <Key className="w-6 h-6 mr-3" />
                 Sell Property
+                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
-              <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy">
-                <Building className="w-5 h-5 mr-2" />
+              <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 sm:col-span-2 lg:col-span-1">
+                <Building className="w-6 h-6 mr-3" />
                 Rent Properties
+                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Popular Cities */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Explore Properties in Major Cities
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Find your perfect home across India's most sought-after locations
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {majorCities.map((city) => (
-              <Card key={city} className="p-4 hover:shadow-md transition-shadow cursor-pointer group">
-                <div className="text-center">
-                  <MapPin className="w-6 h-6 text-primary mx-auto mb-2 group-hover:scale-110 transition-transform" />
-                  <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
-                    {city}
-                  </h3>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Featured Properties */}
       <section className="py-16">
@@ -237,14 +213,16 @@ const HomePage = () => {
           <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
             Join thousands of satisfied customers who found their perfect property with us
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="secondary" size="xl">
-              <Home className="w-5 h-5 mr-2" />
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Button variant="secondary" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+              <Home className="w-6 h-6 mr-3" />
               Start Searching
+              <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
-            <Button variant="outline" size="xl" className="bg-white/10 border-white/30 text-white hover:bg-white hover:text-primary">
-              <Briefcase className="w-5 h-5 mr-2" />
+            <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-primary shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+              <Briefcase className="w-6 h-6 mr-3" />
               List Your Property
+              <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
           </div>
         </div>

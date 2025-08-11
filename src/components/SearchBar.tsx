@@ -66,13 +66,15 @@ const SearchBar = () => {
           <button
             key={tab.id}
             onClick={() => setSelectedTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 px-2 sm:px-4 py-3 text-xs sm:text-sm font-medium transition-colors touch-target focus-visible ${
               selectedTab === tab.id
                 ? "bg-primary text-primary-foreground"
                 : "bg-background hover:bg-muted text-foreground"
             }`}
+            aria-label={`Search for ${tab.label.toLowerCase()}`}
           >
-            {tab.label}
+            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="sm:hidden">{tab.label.split('/')[0]}</span>
           </button>
         ))}
       </div>
@@ -83,27 +85,29 @@ const SearchBar = () => {
           <div className="flex-1 relative">
             <Input
               type="text"
-              placeholder="Search for locality, landmark, project, or builder..."
+              placeholder="Search for locality, landmark, project..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setIsOpen(true);
               }}
               onFocus={() => setIsOpen(true)}
-              className="border-0 rounded-none text-base h-14 pl-4 pr-12 focus-visible:ring-0"
+              className="border-0 rounded-none text-sm sm:text-base h-12 sm:h-14 pl-4 pr-12 focus-visible:ring-0 touch-target"
+              aria-label="Search for properties"
             />
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-2 top-1/2 transform -translate-y-1/2"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 touch-target focus-visible"
               onClick={handleVoiceSearch}
+              aria-label="Voice search"
             >
               <Mic className="w-4 h-4 text-muted-foreground" />
             </Button>
           </div>
-          <Button variant="hero" size="lg" className="rounded-l-none h-14 px-8">
-            <Search className="w-5 h-5 mr-2" />
-            Search
+          <Button variant="hero" size="lg" className="rounded-l-none h-12 sm:h-14 px-4 sm:px-8 btn-remax focus-visible">
+            <Search className="w-4 sm:w-5 h-4 sm:h-5 sm:mr-2" />
+            <span className="hidden sm:inline">Search</span>
           </Button>
         </div>
 

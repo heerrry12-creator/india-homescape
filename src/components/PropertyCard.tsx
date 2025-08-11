@@ -47,25 +47,26 @@ const PropertyCard = ({
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <div className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group ${className}`}>
+    <div className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 ${className}`}>
       {/* Image Container */}
       <div className="relative overflow-hidden">
         <img
           src={image}
           alt={title}
-          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
         />
         
         {/* Overlay Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-2">
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-col gap-1 sm:gap-2">
           {isFeatured && (
-            <Badge className="bg-accent text-accent-foreground">Featured</Badge>
+            <Badge className="bg-accent text-accent-foreground text-xs">Featured</Badge>
           )}
           {isPremium && (
-            <Badge className="bg-warning text-warning-foreground">Premium</Badge>
+            <Badge className="bg-warning text-warning-foreground text-xs">Premium</Badge>
           )}
           {isVerified && (
-            <Badge className="bg-success text-success-foreground">Verified</Badge>
+            <Badge className="bg-success text-success-foreground text-xs">Verified</Badge>
           )}
         </div>
 
@@ -154,10 +155,10 @@ const PropertyCard = ({
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-3">
-          <Button variant="outline" size="sm" className="flex-1">
+          <Button variant="outline" size="sm" className="flex-1 focus-visible text-xs sm:text-sm">
             View Details
           </Button>
-          <Button variant="primary" size="sm" className="flex-1">
+          <Button variant="primary" size="sm" className="flex-1 focus-visible text-xs sm:text-sm">
             Contact Owner
           </Button>
         </div>
