@@ -4,6 +4,7 @@ import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
 import { Home, Zap, Shield, TrendingUp, Users, Phone, Mail, MapPin, 
          Building, Briefcase, Key, Star, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
 
 const HomePage = () => {
@@ -117,21 +118,27 @@ const HomePage = () => {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-              <Button variant="hero" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <Home className="w-6 h-6 mr-3" />
-                Buy Properties
-                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-              </Button>
-              <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <Key className="w-6 h-6 mr-3" />
-                Sell Property
-                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-              </Button>
-              <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 sm:col-span-2 lg:col-span-1">
-                <Building className="w-6 h-6 mr-3" />
-                Rent Properties
-                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-              </Button>
+              <Link to="/buy">
+                <Button variant="hero" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full">
+                  <Home className="w-6 h-6 mr-3" />
+                  Buy Properties
+                  <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
+              </Link>
+              <Link to="/sell">
+                <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full">
+                  <Key className="w-6 h-6 mr-3" />
+                  Sell Property
+                  <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
+              </Link>
+              <Link to="/rent" className="sm:col-span-2 lg:col-span-1">
+                <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-navy shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full">
+                  <Building className="w-6 h-6 mr-3" />
+                  Rent Properties
+                  <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -214,16 +221,20 @@ const HomePage = () => {
             Join thousands of satisfied customers who found their perfect property with us
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button variant="secondary" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
-              <Home className="w-6 h-6 mr-3" />
-              Start Searching
-              <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
-            <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-primary shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
-              <Briefcase className="w-6 h-6 mr-3" />
-              List Your Property
-              <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
+            <Link to="/buy">
+              <Button variant="secondary" size="xl" className="group h-14 text-base font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+                <Home className="w-6 h-6 mr-3" />
+                Start Searching
+                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+              </Button>
+            </Link>
+            <Link to="/sell">
+              <Button variant="outline" size="xl" className="group h-14 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white hover:text-primary shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-w-[200px]">
+                <Briefcase className="w-6 h-6 mr-3" />
+                List Your Property
+                <ChevronRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
