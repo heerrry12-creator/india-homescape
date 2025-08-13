@@ -230,7 +230,7 @@ const HomePage = () => {
             className="w-full h-full object-cover opacity-20 transition-all duration-500"
             key={selectedCategory}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/80 to-primary/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 via-navy/70 to-red-400/30"></div>
         </div>
         
         <div className="relative container mx-auto px-4 py-20 lg:py-32">
@@ -243,31 +243,10 @@ const HomePage = () => {
               Discover perfect properties across 50+ major cities. Buy, sell, or rent with confidence.
             </p>
             
-            {/* Category Buttons */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
-              {categories.map((category) => {
-                const Icon = category.icon;
-                return (
-                  <button
-                    key={category.id}
-                    onClick={() => handleCategoryChange(category.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      selectedCategory === category.id
-                        ? "bg-white text-primary shadow-lg"
-                        : "bg-white/20 text-white hover:bg-white/30"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden sm:inline">{category.label}</span>
-                    <span className="sm:hidden">{category.label.split('/')[0]}</span>
-                  </button>
-                );
-              })}
-            </div>
             
             {/* Search Bar */}
             <div className="mb-8">
-              <SearchBar selectedCategory={selectedCategory} />
+              <SearchBar selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
             </div>
 
             {/* Quick Actions */}

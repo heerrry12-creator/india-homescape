@@ -5,9 +5,10 @@ import { Search, MapPin, Building, Mic, TrendingUp } from "lucide-react";
 
 interface SearchBarProps {
   selectedCategory?: string;
+  onCategoryChange?: (categoryId: string) => void;
 }
 
-const SearchBar = ({ selectedCategory = "buy" }: SearchBarProps) => {
+const SearchBar = ({ selectedCategory = "buy", onCategoryChange }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState(selectedCategory);
@@ -114,7 +115,10 @@ const SearchBar = ({ selectedCategory = "buy" }: SearchBarProps) => {
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setSelectedTab(tab.id)}
+            onClick={() => {
+              setSelectedTab(tab.id);
+              onCategoryChange?.(tab.id);
+            }}
             className={`flex-1 px-2 sm:px-4 py-3 text-xs sm:text-sm font-medium transition-colors touch-target focus-visible ${
               selectedTab === tab.id
                 ? "bg-primary text-primary-foreground"
