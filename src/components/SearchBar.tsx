@@ -3,10 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, MapPin, Building, Mic, TrendingUp } from "lucide-react";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  selectedCategory?: string;
+}
+
+const SearchBar = ({ selectedCategory = "buy" }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("buy");
+  const [selectedTab, setSelectedTab] = useState(selectedCategory);
   const searchRef = useRef<HTMLDivElement>(null);
 
   const suggestions = [
@@ -18,14 +22,59 @@ const SearchBar = () => {
     { type: "project", name: "Brigade Cornerstone", icon: Building },
   ];
 
-  const popularLocalities = [
-    "Gurgaon", "Noida", "Pune", "Hyderabad", "Bangalore", "Chennai",
-    "Mumbai", "Delhi", "Kolkata", "Ahmedabad", "Jaipur", "Chandigarh"
+  const majorCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
+    "Pune", "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur",
+    "Nagpur", "Visakhapatnam", "Indore", "Thane", "Bhopal", "Patna",
+    "Vadodara", "Ghaziabad", "Ludhiana", "Agra", "Nashik", "Faridabad",
+    "Meerut", "Rajkot", "Kalyan", "Vasai", "Varanasi", "Srinagar",
+    "Dhanbad", "Jodhpur", "Amritsar", "Raipur", "Allahabad", "Coimbatore",
+    "Jabalpur", "Gwalior", "Vijayawada", "Madurai", "Gurgaon", "Navi Mumbai",
+    "Chandigarh", "Howrah", "Ranchi", "Jalandhar", "Tiruchirappalli", "Kota",
+    "Guwahati", "Mysore", "Bareilly", "Aligarh", "Noida", "Jamshedpur"
   ];
+
+  // Filter cities based on search term
+  const getFilteredCities = () => {
+    if (!searchTerm.trim()) return { matchingCities: [], otherCities: majorCities.sort() };
+    
+    const term = searchTerm.toLowerCase();
+    const matchingCities = majorCities.filter(city => 
+      city.toLowerCase().includes(term)
+    );
+    
+    const otherCities = majorCities.filter(city => 
+      !city.toLowerCase().includes(term)
+    ).sort();
+    
+    return { matchingCities, otherCities };
+  };
+
+  // Highlight matching text
+  const highlightMatch = (text: string, searchTerm: string) => {
+    if (!searchTerm.trim()) return text;
+    
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    const parts = text.split(regex);
+    
+    return parts.map((part, index) => 
+      regex.test(part) ? (
+        <span key={index} className="font-bold text-primary">{part}</span>
+      ) : (
+        <span key={index}>{part}</span>
+      )
+    );
+  };
 
   const filteredSuggestions = suggestions.filter(suggestion =>
     suggestion.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const { matchingCities, otherCities } = getFilteredCities();
+
+  useEffect(() => {
+    setSelectedTab(selectedCategory);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -113,10 +162,35 @@ const SearchBar = () => {
 
         {/* Suggestions Dropdown */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white border border-t-0 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-            {searchTerm && filteredSuggestions.length > 0 && (
+          <div className="absolute top-full left-0 right-0 bg-white border border-t-0 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto animate-fade-in">
+            {/* Matching Cities */}
+            {searchTerm && matchingCities.length > 0 && (
               <div className="p-4">
-                <h3 className="text-sm font-medium text-muted-foreground mb-3">Search Results</h3>
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                  Cities matching "{searchTerm}"
+                </h3>
+                {matchingCities.map((city, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setSearchTerm(city);
+                      setIsOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 p-2 hover:bg-muted rounded-md text-left transition-colors"
+                  >
+                    <MapPin className="w-4 h-4 text-muted-foreground" />
+                    <div className="text-foreground">
+                      {highlightMatch(city, searchTerm)}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Suggestions from landmarks/projects */}
+            {searchTerm && filteredSuggestions.length > 0 && (
+              <div className="p-4 border-t">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">Suggestions</h3>
                 {filteredSuggestions.map((suggestion, index) => {
                   const Icon = suggestion.icon;
                   return (
@@ -126,11 +200,11 @@ const SearchBar = () => {
                         setSearchTerm(suggestion.name);
                         setIsOpen(false);
                       }}
-                      className="w-full flex items-center gap-3 p-2 hover:bg-muted rounded-md text-left"
+                      className="w-full flex items-center gap-3 p-2 hover:bg-muted rounded-md text-left transition-colors"
                     >
                       <Icon className="w-4 h-4 text-muted-foreground" />
                       <div>
-                        <span className="text-foreground">{suggestion.name}</span>
+                        <span className="text-foreground">{highlightMatch(suggestion.name, searchTerm)}</span>
                         <span className="text-xs text-muted-foreground ml-2 capitalize">
                           {suggestion.type}
                         </span>
@@ -141,24 +215,47 @@ const SearchBar = () => {
               </div>
             )}
 
-            {/* Popular Localities */}
-            <div className="p-4 border-t">
-              <h3 className="text-sm font-medium text-muted-foreground mb-3">Popular Localities</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {popularLocalities.map((locality) => (
-                  <button
-                    key={locality}
-                    onClick={() => {
-                      setSearchTerm(locality);
-                      setIsOpen(false);
-                    }}
-                    className="text-left p-2 hover:bg-muted rounded-md text-sm text-foreground"
-                  >
-                    {locality}
-                  </button>
-                ))}
+            {/* Other Cities */}
+            {searchTerm && otherCities.length > 0 && (
+              <div className="p-4 border-t">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">Other Cities</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+                  {otherCities.slice(0, 12).map((city) => (
+                    <button
+                      key={city}
+                      onClick={() => {
+                        setSearchTerm(city);
+                        setIsOpen(false);
+                      }}
+                      className="text-left p-2 hover:bg-muted rounded-md text-sm text-foreground transition-colors"
+                    >
+                      {city}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Show all cities when no search term */}
+            {!searchTerm && (
+              <div className="p-4">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">Popular Cities</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {majorCities.slice(0, 12).map((city) => (
+                    <button
+                      key={city}
+                      onClick={() => {
+                        setSearchTerm(city);
+                        setIsOpen(false);
+                      }}
+                      className="text-left p-2 hover:bg-muted rounded-md text-sm text-foreground transition-colors"
+                    >
+                      {city}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
