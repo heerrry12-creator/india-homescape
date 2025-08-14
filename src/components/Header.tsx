@@ -44,10 +44,12 @@ const Header = () => {
               <Phone className="w-4 h-4" />
               <span className="hidden lg:inline">+91 98765 43210</span>
             </Button>
-            <Button variant="navy" size="sm" className="gap-1 focus-visible">
-              <User className="w-4 h-4" />
-              Login
-            </Button>
+            <Link to="/auth">
+              <Button variant="navy" size="sm" className="gap-1 focus-visible">
+                <User className="w-4 h-4" />
+                Login
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -98,10 +100,12 @@ const Header = () => {
                   <Heart className="w-4 h-4" />
                   Saved Properties
                 </Button>
-                <Button variant="navy" size="sm" className="w-full justify-start gap-2">
-                  <User className="w-4 h-4" />
-                  Login / Sign Up
-                </Button>
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="navy" size="sm" className="w-full justify-start gap-2">
+                    <User className="w-4 h-4" />
+                    Login / Sign Up
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
