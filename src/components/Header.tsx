@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, User, Heart } from "lucide-react";
+import { Menu, X, Phone, User, Heart, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, user, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
@@ -44,12 +46,27 @@ const Header = () => {
               <Phone className="w-4 h-4" />
               <span className="hidden lg:inline">+91 98765 43210</span>
             </Button>
-            <Link to="/auth">
-              <Button variant="navy" size="sm" className="gap-1 focus-visible">
-                <User className="w-4 h-4" />
-                Login
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-3">
+                <Link to="/dashboard">
+                  <Button variant="ghost" size="sm" className="gap-1 focus-visible">
+                    <User className="w-4 h-4" />
+                    <span className="hidden lg:inline">Dashboard</span>
+                  </Button>
+                </Link>
+                <Button variant="outline" size="sm" onClick={signOut} className="gap-1 focus-visible">
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden lg:inline">Sign Out</span>
+                </Button>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <Button variant="navy" size="sm" className="gap-1 focus-visible">
+                  <User className="w-4 h-4" />
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -100,12 +117,27 @@ const Header = () => {
                   <Heart className="w-4 h-4" />
                   Saved Properties
                 </Button>
-                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="navy" size="sm" className="w-full justify-start gap-2">
-                    <User className="w-4 h-4" />
-                    Login / Sign Up
-                  </Button>
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
+                        <User className="w-4 h-4" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <Button variant="outline" size="sm" onClick={() => { signOut(); setIsMenuOpen(false); }} className="w-full justify-start gap-2">
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="navy" size="sm" className="w-full justify-start gap-2">
+                      <User className="w-4 h-4" />
+                      Login / Sign Up
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

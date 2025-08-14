@@ -7,18 +7,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, EyeOff, User as UserIcon, Mail, Lock, AlertCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import type { User, Session } from '@supabase/supabase-js';
+import { useAuth } from "@/contexts/AuthContext";
 
 const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { signIn, signUp, isAuthenticated, loading } = useAuth();
 
   // Form states
   const [loginForm, setLoginForm] = useState({
@@ -33,65 +29,25 @@ const Auth = () => {
   });
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Redirect to home if user is authenticated
-        if (session?.user) {
-          navigate('/');
-        }
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      // Redirect to home if user is already authenticated
-      if (session?.user) {
-        navigate('/');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (!loading && isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginForm.email,
-        password: loginForm.password,
-      });
-
-      if (error) {
-        if (error.message.includes("Invalid login credentials")) {
-          setError("Invalid email or password. Please check your credentials and try again.");
-        } else if (error.message.includes("Email not confirmed")) {
-          setError("Please check your email and click the confirmation link before signing in.");
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Success!",
-        description: "You've been logged in successfully.",
-      });
-
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
+    const { error } = await signIn(loginForm.email, loginForm.password);
+    
+    if (error) {
+      setError(error);
+    } else {
+      navigate('/dashboard');
     }
+    
+    setIsLoading(false);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -111,36 +67,13 @@ const Auth = () => {
       return;
     }
 
-    try {
-      const redirectUrl = `${window.location.origin}/`;
-
-      const { error } = await supabase.auth.signUp({
-        email: signupForm.email,
-        password: signupForm.password,
-        options: {
-          emailRedirectTo: redirectUrl
-        }
-      });
-
-      if (error) {
-        if (error.message.includes("User already registered")) {
-          setError("An account with this email already exists. Please try logging in instead.");
-        } else {
-          setError(error.message);
-        }
-        return;
-      }
-
-      toast({
-        title: "Account created!",
-        description: "Please check your email for a confirmation link.",
-      });
-
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
+    const { error } = await signUp(signupForm.email, signupForm.password);
+    
+    if (error) {
+      setError(error);
     }
+    
+    setIsLoading(false);
   };
 
   return (
