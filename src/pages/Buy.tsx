@@ -1,19 +1,16 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import PropertyCard from "@/components/PropertyCard";
-import { Slider } from "@/components/ui/slider";
-import { Search, Filter, MapPin, Home, Building, TreePine, Store } from "lucide-react";
+import PropertyFilter from "@/components/PropertyFilter";
+import { MapPin, Home, Building, TreePine, Store, Grid3X3, List, Zap } from "lucide-react";
 
 const BuyPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [propertyType, setPropertyType] = useState("");
-  const [budgetRange, setBudgetRange] = useState([10, 200]);
-  const [bedrooms, setBedrooms] = useState("");
+  const [filters, setFilters] = useState({});
+  const [viewMode, setViewMode] = useState("grid");
+  const [showMap, setShowMap] = useState(false);
 
   const cities = [
     "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata",
@@ -44,7 +41,8 @@ const BuyPage = () => {
       views: 125,
       photos: 12,
       videos: 1,
-      daysListed: 2
+      daysListed: 2,
+      status: "Hot Deal"
     },
     {
       id: "2",
@@ -59,7 +57,8 @@ const BuyPage = () => {
       isFeatured: true,
       views: 89,
       photos: 8,
-      daysListed: 5
+      daysListed: 5,
+      status: "Active"
     },
     {
       id: "3",
@@ -74,7 +73,59 @@ const BuyPage = () => {
       isVerified: true,
       views: 67,
       photos: 6,
-      daysListed: 1
+      daysListed: 1,
+      status: "New"
+    },
+    {
+      id: "4",
+      title: "Spacious 4BHK Penthouse",
+      price: "₹2.5 Cr",
+      location: "Koramangala, Bangalore",
+      bedrooms: 4,
+      bathrooms: 4,
+      area: "2,800 sq ft",
+      type: "Penthouse",
+      image: "/placeholder.svg",
+      isVerified: true,
+      isFeatured: true,
+      views: 234,
+      photos: 15,
+      videos: 2,
+      daysListed: 3,
+      status: "Open House"
+    },
+    {
+      id: "5",
+      title: "Cozy 1BHK Studio Apartment",
+      price: "₹45 Lac",
+      location: "Powai, Mumbai",
+      bedrooms: 1,
+      bathrooms: 1,
+      area: "650 sq ft",
+      type: "Studio",
+      image: "/placeholder.svg",
+      isVerified: true,
+      views: 98,
+      photos: 7,
+      daysListed: 4,
+      status: "Price Reduced"
+    },
+    {
+      id: "6",
+      title: "Independent House with Garden",
+      price: "₹1.8 Cr",
+      location: "Jubilee Hills, Hyderabad",
+      bedrooms: 5,
+      bathrooms: 4,
+      area: "3,200 sq ft",
+      type: "House",
+      image: "/placeholder.svg",
+      isPremium: true,
+      views: 156,
+      photos: 20,
+      videos: 1,
+      daysListed: 7,
+      status: "Active"
     }
   ];
 
@@ -98,82 +149,7 @@ const BuyPage = () => {
         {/* Search & Filters */}
         <section className="py-8 bg-card shadow-nav">
           <div className="container mx-auto px-4">
-            <Card className="p-6">
-              <div className="space-y-6">
-                {/* Main Search */}
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by city, locality, or project..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-12 text-lg"
-                  />
-                </div>
-
-                {/* Filters Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                  <Select value={selectedCity} onValueChange={setSelectedCity}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {cities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Property Type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {propertyTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          {type.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={bedrooms} onValueChange={setBedrooms}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Bedrooms" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 BHK</SelectItem>
-                      <SelectItem value="2">2 BHK</SelectItem>
-                      <SelectItem value="3">3 BHK</SelectItem>
-                      <SelectItem value="4">4+ BHK</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Budget (₹ Lac)</label>
-                    <Slider
-                      value={budgetRange}
-                      onValueChange={setBudgetRange}
-                      max={500}
-                      min={10}
-                      step={10}
-                      className="w-full"
-                    />
-                    <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>₹{budgetRange[0]} Lac</span>
-                      <span>₹{budgetRange[1]} Lac</span>
-                    </div>
-                  </div>
-
-                  <Button className="h-10" variant="primary">
-                    <Filter className="w-4 h-4 mr-2" />
-                    Search Properties
-                  </Button>
-                </div>
-              </div>
-            </Card>
+            <PropertyFilter onFilterChange={setFilters} type="buy" />
           </div>
         </section>
 
@@ -199,9 +175,35 @@ const BuyPage = () => {
         <section className="py-8">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Available Properties</h2>
               <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-bold">Featured Properties</h2>
                 <span className="text-muted-foreground">{sampleProperties.length} properties found</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex border rounded-lg">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                  >
+                    <List className="w-4 h-4" />
+                  </Button>
+                </div>
+                <Button
+                  variant={showMap ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowMap(!showMap)}
+                >
+                  <MapPin className="w-4 h-4 mr-2" />
+                  {showMap ? "Hide Map" : "Show Map"}
+                </Button>
                 <Select defaultValue="newest">
                   <SelectTrigger className="w-40">
                     <SelectValue />
@@ -211,20 +213,36 @@ const BuyPage = () => {
                     <SelectItem value="price-low">Price: Low to High</SelectItem>
                     <SelectItem value="price-high">Price: High to Low</SelectItem>
                     <SelectItem value="area">Area</SelectItem>
+                    <SelectItem value="popular">Most Viewed</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {showMap && (
+              <div className="bg-muted/30 rounded-lg p-8 text-center mb-6">
+                <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Interactive Map View</h3>
+                <p className="text-muted-foreground">
+                  Interactive property map would be displayed here with all property locations
+                </p>
+              </div>
+            )}
+
+            <div className={`grid ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
               {sampleProperties.map((property) => (
-                <PropertyCard key={property.id} {...property} />
+                <PropertyCard 
+                  key={property.id} 
+                  {...property} 
+                  className={viewMode === "list" ? "md:flex md:max-w-none" : ""}
+                />
               ))}
             </div>
 
-            {/* Load More */}
+            {/* Infinite Scroll Trigger */}
             <div className="text-center mt-8">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="group">
+                <Zap className="w-4 h-4 mr-2 group-hover:animate-pulse" />
                 Load More Properties
               </Button>
             </div>

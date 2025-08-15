@@ -1,7 +1,8 @@
-import { Heart, MapPin, Bed, Bath, Square, Calendar, Eye, Camera, Video } from "lucide-react";
+import { Heart, MapPin, Bed, Bath, Square, Calendar, Eye, Camera, Video, Share2, Maximize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import PropertyDetailModal from "@/components/PropertyDetailModal";
 
 interface PropertyCardProps {
   id: string;
@@ -45,9 +46,32 @@ const PropertyCard = ({
   className = ""
 }: PropertyCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+
+  const propertyData = {
+    id, title, price, originalPrice, location, bedrooms, bathrooms, 
+    area, type, image, isVerified, isPremium, isFeatured, views, photos, videos, daysListed
+  };
+
+  const shareProperty = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        text: `Check out this amazing property: ${title}`,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+    }
+  };
 
   return (
-    <div className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 ${className}`}>
+    <>
+      <div 
+        className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 cursor-pointer hover:scale-105 ${className}`}
+        onClick={() => setShowDetailModal(true)}
+      >
       {/* Image Container */}
       <div className="relative overflow-hidden">
         <img
@@ -86,17 +110,30 @@ const PropertyCard = ({
           )}
         </div>
 
-        {/* Like Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className={`absolute top-3 right-3 bg-white/80 hover:bg-white ${
-            isLiked ? "text-primary" : "text-muted-foreground"
-          }`}
-          onClick={() => setIsLiked(!isLiked)}
-        >
-          <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
-        </Button>
+        {/* Action Buttons */}
+        <div className="absolute top-3 right-3 flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="bg-white/80 hover:bg-white text-muted-foreground hover:text-primary"
+            onClick={shareProperty}
+          >
+            <Share2 className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`bg-white/80 hover:bg-white ${
+              isLiked ? "text-red-500" : "text-muted-foreground hover:text-red-500"
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLiked(!isLiked);
+            }}
+          >
+            <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+          </Button>
+        </div>
       </div>
 
       {/* Content */}
@@ -155,15 +192,36 @@ const PropertyCard = ({
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-3">
-          <Button variant="outline" size="sm" className="flex-1 focus-visible text-xs sm:text-sm">
-            View Details
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1 focus-visible text-xs sm:text-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDetailModal(true);
+            }}
+          >
+            <Maximize className="w-3 h-3 mr-1" />
+            Quick View
           </Button>
-          <Button variant="primary" size="sm" className="flex-1 focus-visible text-xs sm:text-sm">
+          <Button 
+            variant="primary" 
+            size="sm" 
+            className="flex-1 focus-visible text-xs sm:text-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
             Contact Owner
           </Button>
         </div>
       </div>
     </div>
+
+      <PropertyDetailModal
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        property={propertyData}
+      />
+    </>
   );
 };
 
