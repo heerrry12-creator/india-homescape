@@ -70,7 +70,15 @@ const PropertyCard = ({
     <>
       <div 
         className={`bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 cursor-pointer hover:scale-105 ${className}`}
-        onClick={() => setShowDetailModal(true)}
+        onClick={() => {
+          const isMobile = window.innerWidth < 768;
+          if (isMobile) {
+            setShowDetailModal(true);
+          } else {
+            // On desktop, open property details in new tab (for now, use modal)
+            setShowDetailModal(true);
+          }
+        }}
       >
       {/* Image Container */}
       <div className="relative overflow-hidden">

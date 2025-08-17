@@ -372,95 +372,22 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Premium Plans Section */}
-      <section className="py-16 bg-background">
+      {/* Premium Plan Box */}
+      <section className="py-8">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Premium Plans
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Choose the perfect plan to buy, sell, or rent properties with exclusive benefits
-            </p>
-          </div>
-
-          {/* Seller Plans */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">For Sellers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {premiumPlans.map((plan, index) => (
-                <Card key={index} className={`p-6 relative ${plan.popular ? 'border-primary shadow-lg' : ''} hover:shadow-xl transition-shadow`}>
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                        Recommended
-                      </span>
-                    </div>
-                  )}
-                  <div className="text-center mb-6">
-                    <h4 className="text-xl font-bold text-foreground mb-2">{plan.name}</h4>
-                    <div className="mb-4">
-                      <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                      <span className="text-muted-foreground">/{plan.period}</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3">
-                        <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    variant={plan.popular ? "primary" : "outline"} 
-                    size="lg" 
-                    className="w-full"
-                  >
-                    Buy Now
-                  </Button>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Buyer Plans */}
-          <div>
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">For Buyers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {buyerPlans.map((plan, index) => (
-                <Card key={index} className={`p-6 relative ${plan.popular ? 'border-primary shadow-lg' : ''} hover:shadow-xl transition-shadow`}>
-                  {plan.popular && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                        Recommended
-                      </span>
-                    </div>
-                  )}
-                  <div className="text-center mb-6">
-                    <h4 className="text-xl font-bold text-foreground mb-2">{plan.name}</h4>
-                    <div className="mb-4">
-                      <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                      <span className="text-muted-foreground">/{plan.period}</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3">
-                        <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    variant={plan.popular ? "primary" : "outline"} 
-                    size="lg" 
-                    className="w-full"
-                  >
-                    Buy Now
-                  </Button>
-                </Card>
-              ))}
+          <div className="max-w-md mx-auto">
+            <div 
+              onClick={() => {
+                const isMobile = window.innerWidth < 768;
+                if (isMobile) {
+                  window.location.href = '/premium-plans';
+                } else {
+                  window.open('/premium-plans', '_blank');
+                }
+              }}
+              className="cursor-pointer bg-gradient-to-r from-blue-500 to-red-500 rounded-xl p-8 text-center text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              <h2 className="text-2xl md:text-3xl font-bold">Premium Plan</h2>
             </div>
           </div>
         </div>
