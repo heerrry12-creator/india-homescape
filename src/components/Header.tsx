@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, User, Heart, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import UserProfilePanel from "./UserProfilePanel";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfilePanelOpen, setIsProfilePanelOpen] = useState(false);
   const { isAuthenticated, user, signOut } = useAuth();
 
   return (
@@ -48,15 +50,14 @@ const Header = () => {
             </Button>
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
-                <Link to="/dashboard">
-                  <Button variant="ghost" size="sm" className="gap-1 focus-visible">
-                    <User className="w-4 h-4" />
-                    <span className="hidden lg:inline">Dashboard</span>
-                  </Button>
-                </Link>
-                <Button variant="outline" size="sm" onClick={signOut} className="gap-1 focus-visible">
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden lg:inline">Sign Out</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="gap-1 focus-visible"
+                  onClick={() => setIsProfilePanelOpen(true)}
+                >
+                  <User className="w-4 h-4" />
+                  <span className="hidden lg:inline">Profile</span>
                 </Button>
               </div>
             ) : (
@@ -143,6 +144,12 @@ const Header = () => {
           </div>
         )}
       </div>
+
+      {/* User Profile Panel */}
+      <UserProfilePanel 
+        isOpen={isProfilePanelOpen} 
+        onClose={() => setIsProfilePanelOpen(false)} 
+      />
     </header>
   );
 };
