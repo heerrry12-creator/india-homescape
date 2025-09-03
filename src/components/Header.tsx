@@ -4,10 +4,12 @@ import { Menu, X, Phone, User, Heart, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import UserProfilePanel from "./UserProfilePanel";
+import AuthModal from "./AuthModal";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfilePanelOpen, setIsProfilePanelOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { isAuthenticated, user, signOut } = useAuth();
 
   return (
@@ -61,12 +63,15 @@ const Header = () => {
                 </Button>
               </div>
             ) : (
-              <Link to="/auth">
-                <Button variant="navy" size="sm" className="gap-1 focus-visible">
-                  <User className="w-4 h-4" />
-                  Login
-                </Button>
-              </Link>
+              <Button 
+                variant="navy" 
+                size="sm" 
+                className="gap-1 focus-visible"
+                onClick={() => setIsAuthModalOpen(true)}
+              >
+                <User className="w-4 h-4" />
+                Login
+              </Button>
             )}
           </div>
 
@@ -132,12 +137,18 @@ const Header = () => {
                     </Button>
                   </>
                 ) : (
-                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                    <Button variant="navy" size="sm" className="w-full justify-start gap-2">
-                      <User className="w-4 h-4" />
-                      Login / Sign Up
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="navy" 
+                    size="sm" 
+                    className="w-full justify-start gap-2"
+                    onClick={() => { 
+                      setIsAuthModalOpen(true); 
+                      setIsMenuOpen(false); 
+                    }}
+                  >
+                    <User className="w-4 h-4" />
+                    Login / Sign Up
+                  </Button>
                 )}
               </div>
             </div>
@@ -149,6 +160,12 @@ const Header = () => {
       <UserProfilePanel 
         isOpen={isProfilePanelOpen} 
         onClose={() => setIsProfilePanelOpen(false)} 
+      />
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </header>
   );
